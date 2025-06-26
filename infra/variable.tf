@@ -5,9 +5,11 @@ variable "vpc_nb" {
   })
 }
 
-variable "subnet_nb" {
+variable "subnet" {
   type = map(object({
     cidr_block = string
     name       = string
+    type = string
+    az = string
   }))
 }
