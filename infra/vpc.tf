@@ -106,3 +106,17 @@ resource "aws_vpc_security_group_ingress_rule" "allow-rds-access" {
   cidr_ipv4 =        [vpc.nb.cidr_block]
   
 }
+
+resource "aws_db_subnet_group" "nb-rds-subnet-group" {
+  name       = "nb-rds-subnet-group"
+  subnet_ids = [
+    for subnet in aws_subnet.nb-subnet : subnet.id 
+    if subnet.type == "private"
+  ]
+
+  tags = {
+    Name = "nb-rds-subnet-group"
+  }
+  
+}
+
