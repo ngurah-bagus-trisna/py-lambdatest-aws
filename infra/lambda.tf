@@ -37,24 +37,24 @@ resource "aws_iam_policy" "lambda-policy" {
         ]
       },
       {
-        "Sid": "AllowManageENI",
-        "Effect": "Allow",
-        "Action": [
+        "Sid" : "AllowManageENI",
+        "Effect" : "Allow",
+        "Action" : [
           "ec2:CreateNetworkInterface",
           "ec2:DescribeNetworkInterfaces",
           "ec2:DeleteNetworkInterface"
         ],
-        "Resource": "*"
+        "Resource" : "*"
       },
       {
-        "Sid": "AllowCloudWatchLogs",
-        "Effect": "Allow",
-        "Action": [
+        "Sid" : "AllowCloudWatchLogs",
+        "Effect" : "Allow",
+        "Action" : [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource": "*"
+        "Resource" : "*"
       }
     ]
     }
@@ -96,16 +96,16 @@ resource "aws_lambda_function" "db_to_s3_lambda" {
   function_name    = "dbToS3Lambda"
   handler          = "app.lambda_handler"
   runtime          = "python3.12"
-  filename         = "${path.module}/lambda.zip"
+  filename         = "${path.module}/lambda_function.zip"
   role             = aws_iam_role.reporting_lambda_role.arn
-  source_code_hash = filebase64sha256("${path.module}/lambda.zip")
+  source_code_hash = filebase64sha256("${path.module}/lambda_function.zip")
   timeout          = 10
 
   vpc_config {
-    subnet_ids = [aws_subnet.nb-subnet["private-net-1"].id]
+    subnet_ids         = [aws_subnet.nb-subnet["private-net-1"].id]
     security_group_ids = [aws_security_group.rds-sg.id, aws_security_group.web-sg.id]
   }
-  
+
   environment {
     variables = {
       SECRET_NAME = aws_db_instance.nb-db.master_user_secret[0].secret_arn

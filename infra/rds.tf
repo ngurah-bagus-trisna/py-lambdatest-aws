@@ -1,18 +1,19 @@
 resource "aws_db_subnet_group" "nb-db-subnet" {
+  depends_on = [aws_subnet.nb-subnet]
   name       = "nb-rds-subnet-group"
   subnet_ids = [
-    for subnet in aws_subnet.nb-subnet : subnet.id 
+    for subnet in aws_subnet.nb-subnet : subnet.id
     if subnet.type == "private"
   ]
 
   tags = {
     Name = "nb-rds-subnet-group"
   }
-  
+
 }
 
 resource "aws_db_instance" "nb-db" {
-  depends_on = [ aws_security_group.rds-access, aws_vpc_security_group_ingress_rule.allow-rds-access ]
+  depends_on                  = [aws_security_group.rds-access, aws_vpc_security_group_ingress_rule.allow-rds-access]
   allocated_storage           = 10
   db_name                     = "nbdb"
   engine                      = "mysql"

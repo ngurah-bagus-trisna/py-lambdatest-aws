@@ -1,0 +1,44 @@
+name: Deploy to AWS Lambda
+on:
+  push:
+    branches:
+      - release/**
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: setup_python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      
+      - name: Setup terraform
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: '1.6.0'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+
+      - name: Saved cached virtualenv
+        uses: actions/cache/save@v4
+        with:
+          key: venv-${{ runner.os }}-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('requirements.txt') }}
+          path: venv
+
+      - name: Zip lambda package
+        run: |
+          mkdir -p lambda_package
+          cp -r venv/lib/python3.8/site-packages/* lambda_package/
+          cp app.py lambda_package/.
+          cd lambda_package
+          zip -r ../infra/lambda_function.zip .
+
+      
