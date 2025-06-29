@@ -103,7 +103,7 @@ resource "aws_lambda_function" "db_to_s3_lambda" {
 
   vpc_config {
     subnet_ids         = [aws_subnet.nb-subnet["private-net-1"].id]
-    security_group_ids = [aws_security_group.rds-sg.id, aws_security_group.web-sg.id]
+    security_group_ids = [aws_security_group.rds-access.id, aws_security_group.web-sg.id]
   }
 
   environment {

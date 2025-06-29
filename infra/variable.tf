@@ -1,11 +1,11 @@
 variable "vpc_nb" {
   type = object({
-    cidr_bloc = string
-    name      = string
+    cidr_block = string
+    name       = string
   })
 }
 
-variable "subnet" {
+variable "nb-subnet" {
   type = map(object({
     cidr_block = string
     type       = string

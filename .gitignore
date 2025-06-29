@@ -1,2 +1,6 @@
 venv
 *.tfvars
+*.terraform
+lambda_package
+lambda_function.zip
+*.terraform.lock.hcl

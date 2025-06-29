@@ -13,7 +13,7 @@ jobs:
       - name: setup_python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.13'
       
       - name: Setup terraform
         uses: opentofu/setup-opentofu@v1
@@ -36,7 +36,7 @@ jobs:
       - name: Zip lambda package
         run: |
           mkdir -p lambda_package
-          cp -r venv/lib/python3.8/site-packages/* lambda_package/
+          cp -r venv/lib/python3.13/site-packages/* lambda_package/
           cp app.py lambda_package/.
           cd lambda_package
           zip -r ../infra/lambda_function.zip .

@@ -1,15 +1,14 @@
 resource "aws_db_subnet_group" "nb-db-subnet" {
   depends_on = [aws_subnet.nb-subnet]
-  name       = "nb-rds-subnet-group"
+  name       = "nb-db-subnet"
   subnet_ids = [
-    for subnet in aws_subnet.nb-subnet : subnet.id
-    if subnet.type == "private"
+    for key, val in var.nb-subnet : aws_subnet.nb-subnet[key].id
+    if val.type == "private"
   ]
 
   tags = {
-    Name = "nb-rds-subnet-group"
+    "Name" = "Private DB Subnet Group"
   }
-
 }
 
 resource "aws_db_instance" "nb-db" {
